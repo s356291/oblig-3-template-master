@@ -3,6 +3,7 @@ package no.oslomet.cs.algdat.Oblig3;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 public class SBinTre<T> {
@@ -73,6 +74,7 @@ public class SBinTre<T> {
         while (p != null) {
             s.add(p.verdi.toString());
             p = nestePostorden(p);
+
         }
 
         return s.toString();
@@ -83,7 +85,26 @@ public class SBinTre<T> {
     }
 
     public boolean leggInn(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        Objects.requireNonNull(verdi,"Ikke lovlig nullverdier!");
+        Node<T> p = rot;
+        Node <T> q = null;
+        int  cmp = 0;
+
+
+        while (p != null){
+            q = p;
+
+            cmp = comp.compare(verdi,p.verdi);
+            p = cmp < 0 ? p.venstre : p.høyre;
+        }
+
+        p = new Node<>(verdi, q);
+        if(q == null) rot = p;
+        else if(cmp < 0) q.venstre = p;
+        else q.høyre = p;
+
+        antall ++;
+        return true;
     }
 
     public boolean fjern(T verdi) {
@@ -95,7 +116,18 @@ public class SBinTre<T> {
     }
 
     public int antall(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        Node<T> p = rot;
+        int n = 0;
+
+        while (p != null){
+            int cmp = comp.compare(verdi, p.verdi);
+            p = cmp < 0 ? p.venstre : p.høyre;
+            if (cmp == 0){
+                n++;
+            }
+        }
+
+        return n;
     }
 
     public void nullstill() {
