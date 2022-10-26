@@ -135,8 +135,9 @@ public class SBinTre<T> {
     }
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
-        Objects.requireNonNull(p);      //Sjekker nullverdi
+        Objects.requireNonNull(p);
 
+        // sjekker p har venstrebarn og høyrebarn
         while (true) {
             if (p.venstre != null){
                 p = p.venstre;
@@ -149,7 +150,20 @@ public class SBinTre<T> {
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+        Node <T> q = p.forelder;    //Hjelpevariabel
+
+        if ( q == null){
+            return null;
+        }
+    //sjekker om p er høyrebarn og hvis p er venstre barn
+        if (q.høyre == p) {
+            return q;
+
+        }else if(q.høyre == null){
+            return q;
+        }else{
+            return førstePostorden(q.høyre);
+        }
     }
 
     public void postorden(Oppgave<? super T> oppgave) {
